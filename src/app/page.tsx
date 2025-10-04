@@ -62,9 +62,12 @@ const baseChat = ai.chats.create({
     },
   ],
 });
+
 export default function Home() {
   const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
   const [val, setVal] = useState("Customer is waiting...");
+  const [score, setScore] = useState(0);
+
   async function talk_to_cashier(prompt: string) {
     const message = await currentChat.sendMessage({
       message: prompt,
@@ -107,8 +110,9 @@ export default function Home() {
   async function rateUser() {
     const message = await currentChat.sendMessage({
       message:
-        "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible.",
+        "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format xx/10 and it is the first two characters of the message. Include the leading 0 (for example, 01, 02, etc)",
     });
+    setScore(score + parseInt(message.text.slice(0, 2)));
     return message.text;
   }
 
@@ -141,6 +145,7 @@ export default function Home() {
               New Conversation
             </button>
           </form>
+          <p className="my-3 p-3 bg-black">Score: {score}</p>
         </div>
       </main>
     </div>
