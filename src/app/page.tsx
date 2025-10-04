@@ -14,14 +14,38 @@ const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_KEY;
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
+function selectPersonality(){
+  var personality = Math.floor(Math.random() * 5);
+  var initialPrompt = "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items. Only say what the customer would say."
+  switch(personality){
+    case 0:
+      initialPrompt = initialPrompt.concat(" ","The cashier is scanning items too slowly for your liking. Pressure them to speed up the process.")
+      break;
+    case 1:
+      initialPrompt = initialPrompt.concat(" ","You have 28 coupons you want to use and are paying with cash. You will fiddle around with your change until you find 4 nickels and 3 pennies in your purse.")
+      break;
+    case 2:
+      initialPrompt = initialPrompt.concat(" ","You are an unreasonable boomer who will complain about anything no matter what and ask to see my manager. Use agressive emojis.")
+      break;
+    case 3:
+      initialPrompt = initialPrompt.concat(" ","You are a very quiet customer who does not want to talk. Say as little as possible, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom.")
+      break;
+    case 4:
+      initialPrompt = initialPrompt.concat(" ","You are a very passive agressive person who will backhandedly say everything.")
+      break;
+  }
+  return(initialPrompt)
+}
+
 export default function Home() {
   const [val, setVal] = useState("Customer is waiting...");
+
   async function main(prompt: string) {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        systemInstruction: "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items too slowly. Do not use parenthesis or dashes, only say what the customer would say.",
+        systemInstruction: selectPersonality(),
       },
     });
     return response.text;
