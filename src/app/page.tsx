@@ -14,10 +14,9 @@ const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_KEY;
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-function selectPersonality(){
-  var personality = Math.floor(Math.random() * 5);
+function selectPersonality(x: number){
   var initialPrompt = "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items. Only say what the customer would say."
-  switch(personality){
+  switch(x){
     case 0:
       initialPrompt = initialPrompt.concat(" ","The cashier is scanning items too slowly for your liking. Pressure them to speed up the process.")
       break;
@@ -39,16 +38,27 @@ function selectPersonality(){
 
 export default function Home() {
   const [val, setVal] = useState("Customer is waiting...");
-
   async function main(prompt: string) {
-    const response = await ai.models.generateContent({
+    const response = ai.chats.create({
+    model: "gemini-2.5-flash-lite",
+    history: [
+      {
+        role: "user",
+        parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
+      },
+    ],
+  });
+  const message = await response.sendMessage({
+    message: prompt,
+  });
+    {/*const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
         systemInstruction: selectPersonality(),
       },
-    });
-    return response.text;
+    });*/}
+    return message.text;
   }
   async function handleSubmit(e: React.FormEvent<MyElement>) {
     e.preventDefault();
