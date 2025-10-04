@@ -40,7 +40,7 @@ function selectPersonality(x: number) {
     case 3:
       initialPrompt = initialPrompt.concat(
         " ",
-        "You are a very quiet customer who does not want to talk. Use short, curt, one to five word responses, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom."
+        "You are a very quiet customer who does not want to talk. Use short, curt, one to five word responses, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom. Give a high rating at the end since you don't care."
       );
       break;
     case 4:
@@ -112,7 +112,7 @@ export default function Home() {
   async function rateUser() {
     const message = await currentChat.sendMessage({
       message:
-        "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format xx/10 and it is the first two characters of the message. Include the leading 0 (for example, 01, 02, etc)",
+        "Rate all previous interactions with the cashier from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible. Vary the score from 1-10. Make sure the the score is in the format xx/10 and it is the first two characters of the message. Include the leading 0 (for example, 01, 02, etc)",
     });
     setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
