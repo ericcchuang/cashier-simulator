@@ -129,7 +129,11 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textbox" className="items-center w-sm">
           <p className="my-3 p-3 bg-black">{val}</p>
-          <form onSubmit={handleSubmit} onReset={newCustomer}>
+          <form
+            className="flex justify-center"
+            onSubmit={handleSubmit}
+            onReset={newCustomer}
+          >
             <input
               type="text"
               id="textbox"
@@ -137,12 +141,12 @@ export default function Home() {
             />
             <button
               type="submit"
-              className="border-2 border-white bg-black p-2"
+              className="border-2 border-white bg-black mx-3 p-2"
             >
               Submit
             </button>
             <button type="reset" className="border-2 border-white bg-black p-2">
-              New Conversation
+              New
             </button>
           </form>
           <p className="my-3 p-3 bg-black">Score: {score}</p>
