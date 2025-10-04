@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { GoogleGenAI } from '@google/genai'
+import { Chat, GoogleGenAI } from '@google/genai'
 import 'dotenv/config'
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement
@@ -36,10 +36,7 @@ function selectPersonality(x: number){
   return(initialPrompt)
 }
 
-export default function Home() {
-  const [val, setVal] = useState("Customer is waiting...");
-  async function main(prompt: string) {
-    const response = ai.chats.create({
+  const response = ai.chats.create({
     model: "gemini-2.5-flash-lite",
     history: [
       {
@@ -48,6 +45,11 @@ export default function Home() {
       },
     ],
   });
+  
+
+export default function Home() {
+const [val, setVal] = useState("Customer is waiting...");
+async function talk_to_cashier(prompt: string){
   const message = await response.sendMessage({
     message: prompt,
   });
@@ -58,11 +60,13 @@ export default function Home() {
         systemInstruction: selectPersonality(),
       },
     });*/}
+    console.log(response.getHistory());
     return message.text;
   }
+
   async function handleSubmit(e: React.FormEvent<MyElement>) {
     e.preventDefault();
-    const ret = await main(e.currentTarget.elements.textbox.value);
+    const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
     setVal(ret ? ret : "");
   };
   return (
