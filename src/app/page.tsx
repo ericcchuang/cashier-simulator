@@ -99,14 +99,17 @@ export default function Home() {
     >
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textbox" className="items-center w-sm">
-          <p className="my-3">{val}</p>
+          <p className="my-3 p-3 bg-black">{val}</p>
           <form onSubmit={handleSubmit}>
             <input
               type="text"
               id="textbox"
-              className="border-2 border-white mx-3"
+              className="bg-black border-2 border-white mx-3 p-2"
             />
-            <button type="submit" className="border-2 border-white">
+            <button
+              type="submit"
+              className="border-2 border-white bg-black p-2"
+            >
               Submit
             </button>
           </form>
