@@ -92,8 +92,14 @@ export default function Home() {
         <div id="textbox" className="items-center w-sm">
           <p className="my-3">{val}</p>
           <form onSubmit={handleSubmit}>
-            <input type="text" id="textbox" />
-            <button type="submit">Submit</button>
+            <input
+              type="text"
+              id="textbox"
+              className="border-2 border-white mx-3"
+            />
+            <button type="submit" className="border-2 border-white">
+              Submit
+            </button>
           </form>
         </div>
       </main>
