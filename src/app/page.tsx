@@ -95,6 +95,7 @@ export default function Home() {
   async function newCustomer() {
     const ret = await rateUser();
     setVal(ret ?? "");
+    (document.getElementById("customer_chat") as HTMLFormElement).reset();
     setCurrentChat(
       ai.chats.create({
         model: "gemini-2.5-flash-lite",
@@ -133,7 +134,6 @@ export default function Home() {
           <form
             className="flex justify-center"
             onSubmit={handleSubmit}
-            onReset={newCustomer}
             id="customer_chat"
           >
             <input
@@ -148,7 +148,11 @@ export default function Home() {
             >
               Submit
             </button>
-            <button type="reset" className="border-2 border-white bg-black p-2">
+            <button
+              type="button"
+              className="border-2 border-white bg-black p-2"
+              onClick={newCustomer}
+            >
               New
             </button>
           </form>
