@@ -17,7 +17,7 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 function selectPersonality(x: number) {
   var initialPrompt =
-    "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items. Only say what the customer would say.";
+    "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items. Only say what the customer would say. Keep the response to 1-3 sentence as though it was a human conversation.";
   switch (x) {
     case 0:
       initialPrompt = initialPrompt.concat(
@@ -87,6 +87,29 @@ export default function Home() {
     const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
     setVal(ret ? ret : "");
   }
+
+  async function newCustomer() {
+    const ret = await rateUser();
+    setVal(ret ? ret : "");
+    const response = ai.chats.create({
+      model: "gemini-2.5-flash-lite",
+      history: [
+        {
+          role: "user",
+          parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
+        },
+      ],
+    });
+  }
+
+  async function rateUser() {
+    const message = await response.sendMessage({
+      message:
+        "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible.",
+    });
+    return message.text;
+  }
+
   return (
     <div
       className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
@@ -100,7 +123,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textbox" className="items-center w-sm">
           <p className="my-3 p-3 bg-black">{val}</p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onReset={newCustomer}>
             <input
               type="text"
               id="textbox"
@@ -111,6 +134,9 @@ export default function Home() {
               className="border-2 border-white bg-black p-2"
             >
               Submit
+            </button>
+            <button type="reset" className="border-2 border-white bg-black p-2">
+              New Conversation
             </button>
           </form>
         </div>
