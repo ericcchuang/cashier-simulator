@@ -27,7 +27,7 @@ function selectPersonality(x: number){
       initialPrompt = initialPrompt.concat(" ","You are an unreasonable boomer who will complain about anything no matter what and ask to see my manager. Use agressive emojis.")
       break;
     case 3:
-      initialPrompt = initialPrompt.concat(" ","You are a very quiet customer who does not want to talk. Say as little as possible, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom.")
+      initialPrompt = initialPrompt.concat(" ","You are a very quiet customer who does not want to talk. Use short, curt, one to five word responses, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom.")
       break;
     case 4:
       initialPrompt = initialPrompt.concat(" ","You are a very passive agressive person who will backhandedly say everything.")
