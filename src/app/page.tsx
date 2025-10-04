@@ -88,12 +88,13 @@ export default function Home() {
   async function handleSubmit(e: React.FormEvent<MyElement>) {
     e.preventDefault();
     const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
-    setVal(ret ? ret : "");
+    setVal(ret ?? "");
+    (document.getElementById("customer_chat") as HTMLFormElement).reset();
   }
 
   async function newCustomer() {
     const ret = await rateUser();
-    setVal(ret ? ret : "");
+    setVal(ret ?? "");
     setCurrentChat(
       ai.chats.create({
         model: "gemini-2.5-flash-lite",
@@ -112,7 +113,7 @@ export default function Home() {
       message:
         "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format xx/10 and it is the first two characters of the message. Include the leading 0 (for example, 01, 02, etc)",
     });
-    setScore(score + parseInt(message.text.slice(0, 2)));
+    setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
   }
 
@@ -127,16 +128,18 @@ export default function Home() {
       }}
     >
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div id="textbox" className="items-center w-sm">
+        <div id="textboxdiv" className="items-center w-sm">
           <p className="my-3 p-3 bg-black">{val}</p>
           <form
             className="flex justify-center"
             onSubmit={handleSubmit}
             onReset={newCustomer}
+            id="customer_chat"
           >
             <input
               type="text"
               id="textbox"
+              placeholder="talk to customer"
               className="bg-black border-2 border-white mx-3 p-2"
             />
             <button
