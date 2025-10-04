@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
+import backgroundImage from "../assets/background.jpg";
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
 }
@@ -87,7 +88,15 @@ export default function Home() {
     setVal(ret ? ret : "");
   }
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div
+      className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
+      style={{
+        backgroundImage: `url(${backgroundImage.src})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textbox" className="items-center w-sm">
           <p className="my-3">{val}</p>
