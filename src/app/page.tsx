@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GoogleGenAI } from "@google/genai";
 
 export default function Home() {
   return (
