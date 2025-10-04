@@ -53,7 +53,7 @@ function selectPersonality(x: number) {
   return initialPrompt;
 }
 
-const response = ai.chats.create({
+const baseChat = ai.chats.create({
   model: "gemini-2.5-flash-lite",
   history: [
     {
@@ -62,11 +62,11 @@ const response = ai.chats.create({
     },
   ],
 });
-
 export default function Home() {
+  const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
   const [val, setVal] = useState("Customer is waiting...");
   async function talk_to_cashier(prompt: string) {
-    const message = await response.sendMessage({
+    const message = await currentChat.sendMessage({
       message: prompt,
     });
     {
@@ -78,7 +78,7 @@ export default function Home() {
       },
     });*/
     }
-    console.log(response.getHistory());
+    console.log(currentChat.getHistory());
     return message.text;
   }
 
@@ -91,19 +91,21 @@ export default function Home() {
   async function newCustomer() {
     const ret = await rateUser();
     setVal(ret ? ret : "");
-    const response = ai.chats.create({
-      model: "gemini-2.5-flash-lite",
-      history: [
-        {
-          role: "user",
-          parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
-        },
-      ],
-    });
+    setCurrentChat(
+      ai.chats.create({
+        model: "gemini-2.5-flash-lite",
+        history: [
+          {
+            role: "user",
+            parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
+          },
+        ],
+      })
+    );
   }
 
   async function rateUser() {
-    const message = await response.sendMessage({
+    const message = await currentChat.sendMessage({
       message:
         "Rate all previous interactions with the user from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible.",
     });
