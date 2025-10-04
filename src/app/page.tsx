@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { GoogleGenAI } from '@google/genai'
 import 'dotenv/config'
@@ -15,13 +15,13 @@ const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_KEY;
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 export default function Home() {
-  const [val, setVal] = useState("");
+  const [val, setVal] = useState("Customer is waiting...");
   async function main(prompt: string) {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        systemInstruction: "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items too slowly.",
+        systemInstruction: "You are a customer at a grocery store checking out right now. Respond as if I were a cashier who is checking out items too slowly. Do not use parenthesis or dashes, only say what the customer would say.",
       },
     });
     return response.text;
