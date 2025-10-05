@@ -45,7 +45,7 @@ function selectPersonality(x: number) {
     case 3:
       initialPrompt = initialPrompt.concat(
         " ",
-        "You are a very quiet customer who does not want to talk. Use short, curt, one to five word responses, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom. Give a high rating at the end since you don't care."
+        "You are a very quiet customer who does not want to talk. Use short, curt, one to five word responses, to the point of not communicating what needs to happen. Use punctuation such as elipses to indicate boredom. Give a high rating when prompted at the end since you don't care."
       );
       break;
     case 4:
@@ -104,7 +104,7 @@ export default function Home() {
   }
 
   async function newCustomer() {
-    const ret = (await rateUser()) + "Next customer is waiting...";
+    const ret = (await rateUser()) + " Next customer is waiting...";
     setVal(ret ?? "");
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
     setCurrentChat(
@@ -147,6 +147,7 @@ export default function Home() {
       })
     );
     reset();
+    setScore(0);
   }
 
   return (
