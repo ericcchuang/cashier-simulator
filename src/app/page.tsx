@@ -12,6 +12,7 @@ import RandomPortrait from "../components/RandomPortrait";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Scanner from "./groceries/Scanner";
 import Conveyor from "./groceries/Conveyor";
+import Belt from "./groceries/Belt";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -211,6 +212,10 @@ export default function Home() {
           <DndContext modifiers={[restrictToWindowEdges]}>
             <Scanner />
             <Conveyor />
+            <Belt beltID={0} />
+            <Belt beltID={1} />
+            <Belt beltID={2} />
+            <Belt beltID={3} />
           </DndContext>
         </div>
       </main>
