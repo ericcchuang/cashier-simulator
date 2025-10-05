@@ -8,6 +8,7 @@ import GroceryItem from "./groceries/GroceryItem";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
+import InstructionsModal from "../components/Instructions";
 import RandomPortrait from "../components/RandomPortrait";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Scanner from "./groceries/Scanner";
@@ -79,6 +80,7 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [customer, setCustomer] = useState(Math.floor(Math.random() * 6));
   const [tint, setTint] = useState(Math.floor(Math.random() * 10));
+  const [readInstructions, setReadInstructions] = useState<boolean>(false);
   const { time, start, pause, reset, status, advanceTime } = useTimer({
     initialTime: 20,
     timerType: "DECREMENTAL",
@@ -159,6 +161,10 @@ export default function Home() {
     setScore(0);
   }
 
+  async function iRead() {
+    setReadInstructions(true);
+  }
+
   function handleDrop(event: DragEndEvent) {
     if (event.over) {
       const item = document.getElementById(event.active.id.toString());
@@ -234,7 +240,8 @@ export default function Home() {
             <Belt beltID={7} />
           </DndContext>
         </div>
-        {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
+        {!readInstructions ? <InstructionsModal disableScript={iRead} /> : ""}
+        {time < 1 ? <LossModal replayScript={resetGame} score={score} /> : ""}
       </main>
     </div>
   );
