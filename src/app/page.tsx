@@ -150,7 +150,7 @@ export default function Home() {
 
   return (
     <div
-      className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
+      className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-16"
       style={{
         backgroundImage: `url('/assets/background.jpg')`,
         backgroundPosition: "center",
@@ -158,9 +158,18 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      <main className="flex flex-row gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textboxdiv" className="items-center w-sm">
-          <p className="my-3 p-3 bg-black">{val}</p>
+          <Image
+            src="/assets/customer.png"
+            width={200}
+            height={200}
+            alt="customer"
+            className="border-4 border-black"
+          />
+          <div className="my-3 p-3 bg-black min-h-1/2 max-h-1/2 border-2 border-white">
+            {val}
+          </div>
           <form
             className="flex justify-center"
             onSubmit={handleSubmit}
@@ -186,11 +195,13 @@ export default function Home() {
               New
             </button>
           </form>
-          <p className="my-3 p-3 bg-black">
+          <p className="my-3 p-3 bg-black border-2 border-white">
             Score: {score}, Time: {time}
           </p>
         </div>
-        <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
+        <div className="flex-row items-baseline-last">
+          <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
+        </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
       </main>
     </div>
