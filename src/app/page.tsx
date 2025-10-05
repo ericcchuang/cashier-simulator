@@ -238,6 +238,7 @@ export default function Home() {
             <Belt beltID={5} />
             <Belt beltID={6} />
             <Belt beltID={7} />
+            {/* <GroceryItem id={5} imgUrl="/assets/pnut.png" /> */}
           </DndContext>
         </div>
         {!readInstructions ? <InstructionsModal disableScript={iRead} /> : ""}
