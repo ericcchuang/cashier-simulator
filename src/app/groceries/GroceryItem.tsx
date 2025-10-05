@@ -5,19 +5,33 @@ import { useState } from "react";
 interface GroceryItemProps {
   id: string;
   imgUrl: string;
+  className?: string;
 }
 
-export default function GroceryItem({ id, imgUrl }: GroceryItemProps) {
-  const { attributes, listeners, setNodeRef } = useDraggable({
+export default function GroceryItem({
+  id,
+  imgUrl,
+  className,
+}: GroceryItemProps) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
   });
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
 
+  const classConsts = "align-center";
   return (
-    <div ref={setNodeRef}>
-      <button {...listeners} {...attributes}>
-        <img src={imgUrl} />
-        Drag handle
-      </button>
-    </div>
+    <input
+      type="image"
+      src={imgUrl}
+      {...listeners}
+      {...attributes}
+      className={className?.concat(classConsts) ?? classConsts}
+      ref={setNodeRef}
+      style={style}
+    ></input>
   );
 }

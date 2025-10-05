@@ -5,6 +5,7 @@ import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
 import cereal from "../assets/cereal.png";
 import GroceryItem from "./groceries/GroceryItem";
+import { DndContext } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
 
@@ -199,11 +200,13 @@ export default function Home() {
             Score: {score}, Time: {time}
           </p>
         </div>
-        <div className="flex-row items-baseline-last">
-          <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
-        </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
       </main>
+      <div className="flex-row items-baseline-last">
+        <DndContext>
+          <GroceryItem className="" id="hi" imgUrl="/assets/cereal.png" />
+        </DndContext>
+      </div>
     </div>
   );
 }
