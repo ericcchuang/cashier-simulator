@@ -220,7 +220,7 @@ export default function Home() {
           </p>
         </div>
         <div
-          className="flex flex-row justify-center align-middle max-w-3/5 min-w-1/2 items-center mt-15"
+          className="max-w-3/5 min-w-1/2 mt-15"
           style={{ position: "fixed", right: 0 }}
         >
           <DndContext
@@ -228,17 +228,33 @@ export default function Home() {
             modifiers={[restrictToWindowEdges]}
             onDragEnd={handleDrop}
           >
-            <Scanner />
-            <Conveyor />
-            <Belt beltID={0} />
-            <Belt beltID={1} />
-            <Belt beltID={2} />
-            <Belt beltID={3} />
-            <Belt beltID={4} />
-            <Belt beltID={5} />
-            <Belt beltID={6} />
-            <Belt beltID={7} />
-            {/* <GroceryItem id={5} imgUrl="/assets/pnut.png" /> */}
+            <div
+              className="flex flex-row justify-center align-middle items-center"
+              style={{ position: "relative" }}
+            >
+              <Scanner />
+              <Conveyor />
+              <Belt beltID={0} />
+              <Belt beltID={1} />
+              <Belt beltID={2} />
+              <Belt beltID={3} />
+              <Belt beltID={4} />
+              <Belt beltID={5} />
+              <Belt beltID={6} />
+              <Belt beltID={7} />
+            </div>
+            <div style={{ position: "relative" }}>
+              <GroceryItem id="0" item={0} />
+              <GroceryItem id="1" item={1} />
+              <GroceryItem id="2" item={2} />
+              <GroceryItem id="3" item={3} />
+              <GroceryItem id="4" item={4} />
+              <GroceryItem id="5" item={5} />
+              <GroceryItem id="6" item={6} />
+              <GroceryItem id="7" item={7} />
+              <GroceryItem id="8" item={8} />
+              <GroceryItem id="9" item={9} />
+            </div>
           </DndContext>
         </div>
         {!readInstructions ? <InstructionsModal disableScript={iRead} /> : ""}
