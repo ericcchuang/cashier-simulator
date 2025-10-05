@@ -201,12 +201,12 @@ export default function Home() {
           </p>
         </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
+        <div className="flex-row items-baseline-last">
+          <DndContext>
+            <GroceryItem className="" id="hi" imgUrl="/assets/cereal.png" />
+          </DndContext>
+        </div>
       </main>
-      <div className="flex-row items-baseline-last">
-        <DndContext>
-          <GroceryItem className="" id="hi" imgUrl="/assets/cereal.png" />
-        </DndContext>
-      </div>
     </div>
   );
 }
