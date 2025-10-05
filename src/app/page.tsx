@@ -46,6 +46,7 @@ export default function Home() {
   // This useEffect hook runs once on component mount to start the first game
   useEffect(() => {
     resetGame();
+    pause();
   }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -155,6 +156,7 @@ export default function Home() {
 
   async function iRead() {
     setReadInstructions(true);
+    reset();
     start();
   }
 
