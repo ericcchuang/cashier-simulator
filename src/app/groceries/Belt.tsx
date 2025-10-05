@@ -1,7 +1,10 @@
 import React, { ReactNode } from "react";
 import { useDroppable } from "@dnd-kit/core";
 
-export default function Belt({ beltID }) {
+interface BeltProps {
+  beltID: number;
+}
+export default function Belt({ beltID }: BeltProps) {
   let xPos = beltID * -5;
 
   const style = {
@@ -9,7 +12,7 @@ export default function Belt({ beltID }) {
     right: `${beltID * 25}vw`,
   };
 
-  let bid = "belt".concat(beltID);
+  let bid = "belt".concat(beltID.toString());
 
   function moveImage() {
     const image = document.getElementById(bid);
