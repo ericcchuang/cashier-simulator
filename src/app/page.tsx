@@ -6,6 +6,8 @@ import "dotenv/config";
 import cereal from "../assets/cereal.png";
 import GroceryItem from "./groceries/GroceryItem";
 import { useTimer } from "use-timer";
+import LossModal from "../components/Lost";
+
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
 }
@@ -70,7 +72,7 @@ export default function Home() {
   const [val, setVal] = useState("Customer is waiting...");
   const [score, setScore] = useState(0);
   const { time, start, pause, reset, status, advanceTime } = useTimer({
-    initialTime: 15,
+    initialTime: 10,
     timerType: "DECREMENTAL",
   });
 
@@ -127,6 +129,25 @@ export default function Home() {
     setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
   }
+
+  async function resetGame() {
+    const ret = "Next customer is waiting...";
+    setVal(ret ?? "");
+    (document.getElementById("customer_chat") as HTMLFormElement).reset();
+    setCurrentChat(
+      ai.chats.create({
+        model: "gemini-2.5-flash-lite",
+        history: [
+          {
+            role: "user",
+            parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
+          },
+        ],
+      })
+    );
+    reset();
+  }
+
   return (
     <div
       className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
@@ -170,6 +191,7 @@ export default function Home() {
           </p>
         </div>
         <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
+        {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
       </main>
     </div>
   );
