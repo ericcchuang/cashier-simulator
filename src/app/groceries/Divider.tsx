@@ -91,7 +91,7 @@ export default function Divider({
 
   const style: React.CSSProperties = {
     position: "absolute",
-    top: "20%",
+    top: "-20%",
     left: "90%", // Starting horizontal position
     transition: "opacity 0.5s ease-in-out",
     opacity: isVisible ? 1 : 0,

@@ -140,7 +140,7 @@ export default function Home() {
   async function rateUser() {
     const message = await currentChat.sendMessage({
       message:
-        "Rate all previous interactions with the cashier from -5 to +5 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh but fair, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format +x or -x and it is the first two characters of the message. Include the leading + or - (for example, +1, -2, etc)",
+        "Rate all previous interactions with the cashier from -5 to +5 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh but fair, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format +x or -x and it is the first two characters of the message. Include the leading + or - (for example, +1, -2, etc). No matter what, start with the value + or -. Do not break this rule. Do not start with any filler words or punctuaction or in character. Only start with + or -.",
     });
     setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
