@@ -11,9 +11,6 @@ export default function Scanner() {
       : undefined,
     width: "40vw",
   };
-  // if (isOver) {
-  //   console.log("over!!!");
-  // }
 
   return (
     <div ref={setNodeRef} style={style}>

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface InstructionsModalProps {
-  disableScript: () => void; // This specifies that 'disableScript' is a function that returns nothing.
+  disableScript: () => void;
 }
 
 export default function InstructionsModal({

@@ -21,9 +21,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    // 👇 1. Format the history into a simple text transcript.
     const conversationTranscript = history
-      // We slice(2) to remove the initial two setup/personality messages
       .slice(2)
       .map((entry: Content) => {
         const prefix = entry.role === "model" ? "Cashier:" : "Customer:";
@@ -31,7 +29,6 @@ export async function POST(request: Request) {
       })
       .join("\n");
 
-    // 👇 2. Create a new, more direct prompt that includes the transcript.
     const ratingPrompt = `
       Based *only* on the following conversation transcript, rate the cashier's customer service from -5 to +5.
       Be brief (1-2 sentences), harsh but fair.
@@ -44,10 +41,8 @@ export async function POST(request: Request) {
     `;
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    // Use gemini-pro for this kind of analysis task
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
-    // 👇 3. Make a simple, one-off call with the complete prompt.
     const result = await model.generateContent(ratingPrompt);
 
     const ratingText = result.response.text();

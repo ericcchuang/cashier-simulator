@@ -1,10 +1,8 @@
-// components/GroceryItem.tsx
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
 import { useState, useEffect, useRef, CSSProperties } from "react";
 
-// Cleaner way to map items to image URLs
 const groceryImageUrls = [
   "/assets/bleach.png",
   "/assets/cereal.png",
@@ -34,14 +32,12 @@ export default function GroceryItem({ id, item, index }: GroceryItemProps) {
 
   const prevIsDragging = useRef(isDragging);
 
-  // ... (useEffect for visibility remains the same)
   useEffect(() => {
     const delay = index * 300;
     const timer = setTimeout(() => setIsVisible(true), delay);
     return () => clearTimeout(timer);
   }, [index]);
 
-  // Effect for idle animation
   useEffect(() => {
     if (prevIsDragging.current && !isDragging) {
       setIdleRightOffset(0);
@@ -50,8 +46,7 @@ export default function GroceryItem({ id, item, index }: GroceryItemProps) {
 
     const moveImage = () => {
       setIdleRightOffset((prevOffset) =>
-        // 👇 Speed reduced from 0.2 to 0.1.
-        // You can adjust this number to fine-tune the speed.
+        // speed
         prevOffset < 45 ? prevOffset + 0.1 : 45
       );
       animationFrameId.current = requestAnimationFrame(moveImage);

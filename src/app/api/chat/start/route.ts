@@ -51,7 +51,7 @@ export async function POST() {
     const initialMessage = result.response.text();
     const finalHistory = await chat.getHistory();
 
-    // 👇 Also send the chosen personality back to the frontend
+    // send the chosen personality back to the frontend
     return NextResponse.json({
       initialMessage,
       initialHistory: finalHistory,

@@ -1,4 +1,3 @@
-// components/Divider.tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -30,7 +29,6 @@ export default function Divider({
     onDisappearRef.current = onDisappear;
   }, [onDisappear]);
 
-  // useEffect for the appear/disappear cycle (no changes needed)
   useEffect(() => {
     let timerId: NodeJS.Timeout;
     if (isVisible) {
@@ -60,7 +58,6 @@ export default function Divider({
     maxRespawnDelay,
   ]);
 
-  // useEffect for the scrolling animation (updated to match GroceryItem movement)
   useEffect(() => {
     if (isVisible) {
       setScrollX(0); // Reset position
@@ -79,29 +76,17 @@ export default function Divider({
     };
   }, [isVisible]);
 
-  // 👇 All styles are now combined and applied directly to the <img>
   const imageStyle: React.CSSProperties = {
-    // Positioning from the original, visible Divider
     position: "absolute",
     top: "0%",
     left: "100%",
-
-    // Explicit sizing to guarantee visibility
     height: "20vw",
-    width: "auto", // Automatically maintains the image's aspect ratio
-
-    // Animation and visibility styles
+    width: "auto",
     opacity: isVisible ? 1 : 0,
     transform: `translateX(${scrollX}vw)`,
     transition: "opacity 0.5s ease-in-out",
     pointerEvents: "none",
   };
 
-  return (
-    <img
-      src={src}
-      style={imageStyle} // Apply styles directly here
-      alt="Scrolling divider"
-    />
-  );
+  return <img src={src} style={imageStyle} alt="Scrolling divider" />;
 }

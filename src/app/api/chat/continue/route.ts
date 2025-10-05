@@ -34,7 +34,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // 👇 Get the personality from the request body
   const { prompt, history, personality } = await request.json();
   if (!prompt || !history || !personality) {
     return NextResponse.json(
@@ -46,14 +45,12 @@ export async function POST(request: Request) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    // 👇 Initialize the model with the correct personality
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       systemInstruction: personality,
       safetySettings,
     });
 
-    // The history from the client is already correct, so we can use it directly
     const chat = model.startChat({ history });
 
     const result = await chat.sendMessage(prompt);

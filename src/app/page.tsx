@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
-import cereal from "../assets/cereal.png";
 import GroceryItem from "./groceries/GroceryItem";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
 import InstructionsModal from "../components/Instructions";
 import RandomPortrait from "../components/RandomPortrait";
-import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Scanner from "./groceries/Scanner";
 import Conveyor from "./groceries/Conveyor";
 import Belt from "./groceries/Belt";
@@ -23,7 +21,7 @@ interface FormElements extends HTMLFormControlsCollection {
 interface MyElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
-// Define the structure of a chat history item
+
 interface HistoryItem {
   role: "user" | "model";
   parts: { text: string }[];
@@ -43,7 +41,6 @@ export default function Home() {
   });
   const [personality, setPersonality] = useState("");
 
-  // This useEffect hook runs once on component mount to start the first game
   useEffect(() => {
     resetGame();
     pause();
@@ -69,7 +66,6 @@ export default function Home() {
       const response = await fetch("/api/chat/continue", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // 👇 Send the current personality along with the prompt and history
         body: JSON.stringify({ prompt, history: newHistory, personality }),
       });
       const data = await response.json();
@@ -116,8 +112,6 @@ export default function Home() {
 
       if (startResponse.ok) {
         setHistory(startData.initialHistory);
-        // Optionally, update val again if you want the greeting to be the last message seen
-        // setVal(startData.initialMessage);
       } else {
         setVal(`Error: ${startData.error}`);
       }
@@ -140,7 +134,6 @@ export default function Home() {
       const data = await response.json();
 
       if (response.ok && Array.isArray(data.initialHistory)) {
-        // 👇 Store the new personality received from the backend
         setPersonality(data.personality);
         setVal(data.initialMessage);
         setHistory(data.initialHistory);
