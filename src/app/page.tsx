@@ -69,7 +69,7 @@ export default function Home() {
   const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
   const [val, setVal] = useState("Customer is waiting...");
   const [score, setScore] = useState(0);
-  const { time, start, pause, reset, status } = useTimer({
+  const { time, start, pause, reset, status, advanceTime } = useTimer({
     initialTime: 15,
     timerType: "DECREMENTAL",
   });
@@ -96,12 +96,12 @@ export default function Home() {
     const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
     setVal(ret ?? "");
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
-    reset();
+    advanceTime(-5);
     start();
   }
 
   async function newCustomer() {
-    const ret = await rateUser();
+    const ret = (await rateUser()) + "Next customer is waiting...";
     setVal(ret ?? "");
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
     setCurrentChat(
@@ -115,14 +115,14 @@ export default function Home() {
         ],
       })
     );
-    reset();
+    advanceTime(-5);
     start();
   }
 
   async function rateUser() {
     const message = await currentChat.sendMessage({
       message:
-        "Rate all previous interactions with the cashier from 1-10 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh, do not be afraid to give a low score if you think the service was terrible. Vary the score from 1-10. Make sure the the score is in the format xx/10 and it is the first two characters of the message. Include the leading 0 (for example, 01, 02, etc)",
+        "Rate all previous interactions with the cashier from -5 to +5 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh but fair, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format +x or -x and it is the first two characters of the message. Include the leading + or - (for example, +1, -2, etc)",
     });
     setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
