@@ -14,6 +14,7 @@ import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Scanner from "./groceries/Scanner";
 import Conveyor from "./groceries/Conveyor";
 import Belt from "./groceries/Belt";
+import Divider from "./groceries/Divider";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -129,7 +130,6 @@ export default function Home() {
         ],
       })
     );
-    advanceTime(-10);
     start();
   }
 
@@ -159,6 +159,7 @@ export default function Home() {
     );
     reset();
     setScore(0);
+    start();
   }
 
   async function iRead() {
@@ -266,7 +267,11 @@ export default function Home() {
               <Belt beltID={5} />
               <Belt beltID={6} />
               <Belt beltID={7} />
-
+              <Divider
+                src="/assets/divider.png"
+                onDisappear={newCustomer}
+                initialDelay={5}
+              />
               <div style={{ position: "absolute" }}>
                 <GroceryItem id="0" item={0} index={0} />
                 <GroceryItem id="1" item={1} index={1} />
