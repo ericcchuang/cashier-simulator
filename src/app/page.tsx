@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
 import GroceryItem from "./groceries/GroceryItem";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
