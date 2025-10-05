@@ -1,41 +1,50 @@
-import React, { ReactNode } from "react";
-import { useDroppable } from "@dnd-kit/core";
+// src/app/groceries/Belt.tsx
+"use client";
 
+import React, { useState, useEffect, useRef } from "react";
+
+// 👇 1. Update the prop type to expect a number for the ID
 interface BeltProps {
-  beltID: number;
+  id: number;
 }
-export default function Belt({ beltID }: BeltProps) {
-  let xPos = beltID * -5;
+
+export default function Belt({ id }: BeltProps) {
+  const [xPos, setXPos] = useState(id * -5);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const animationFrameId = useRef<number>(0);
+
+  // 👇 2. Create the formatted ID string
+  const beltId = `belt${id}`;
+
+  useEffect(() => {
+    const moveImage = () => {
+      setXPos((prevX) => (prevX > -35 ? prevX - 0.2 : 0));
+      animationFrameId.current = requestAnimationFrame(moveImage);
+    };
+
+    animationFrameId.current = requestAnimationFrame(moveImage);
+
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, []);
 
   const style = {
-    maxHeight: "12.5vw",
-    right: `${beltID * 25}vw`,
+    transform: `translateX(${xPos}vw)`,
   };
 
-  let bid = "belt".concat(beltID.toString());
-
-  function moveImage() {
-    const image = document.getElementById(bid);
-    if (xPos > -35) {
-      xPos = xPos - 0.2;
-    } else {
-      xPos = 0;
-      if (image) {
-        image.style.transform = `translate(60vw, 0px)`;
-      }
-    }
-    // Increment the x-coordinate
-    if (image) {
-      image.style.transform = `translate(${xPos}vw, 0px)`;
-    }
-    requestAnimationFrame(moveImage);
-  }
-
-  moveImage();
-
   return (
-    <div style={style}>
-      <img id={bid} src="/assets/conveyor-anim.png" />
+    <div>
+      <img
+        // 👇 3. Use the new formatted ID
+        id={beltId}
+        ref={imageRef}
+        src="/assets/conveyor-anim.png"
+        style={style}
+        alt="Conveyor belt divider"
+      />
     </div>
   );
 }

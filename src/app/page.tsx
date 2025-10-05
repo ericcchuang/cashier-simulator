@@ -252,14 +252,14 @@ export default function Home() {
             >
               <Scanner />
               <Conveyor />
-              <Belt beltID={0} />
-              <Belt beltID={1} />
-              <Belt beltID={2} />
-              <Belt beltID={3} />
-              <Belt beltID={4} />
-              <Belt beltID={5} />
-              <Belt beltID={6} />
-              <Belt beltID={7} />
+              <Belt id={0} />
+              <Belt id={1} />
+              <Belt id={2} />
+              <Belt id={3} />
+              <Belt id={4} />
+              <Belt id={5} />
+              <Belt id={6} />
+              <Belt id={7} />
               <Divider
                 src="/assets/divider.png"
                 onDisappear={newCustomer}
