@@ -9,6 +9,8 @@ import { DndContext } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
 import RandomPortrait from "../components/RandomPortrait";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import Scanner from "./groceries/Scanner";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -202,8 +204,9 @@ export default function Home() {
         </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
         <div className="flex-row items-baseline-last">
-          <DndContext>
-            <GroceryItem className="" id="hi" imgUrl="/assets/cereal.png" />
+          <DndContext modifiers={[restrictToWindowEdges]}>
+            <Scanner />
+            <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
           </DndContext>
         </div>
       </main>
