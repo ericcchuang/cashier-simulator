@@ -127,6 +127,10 @@ export default function Home() {
             role: "user",
             parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
           },
+          {
+            role: "model",
+            parts: [{ text: "Okay." }],
+          },
         ],
       })
     );
