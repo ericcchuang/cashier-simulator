@@ -32,6 +32,12 @@ export default function selectPersonality(x: number) {
         "You are a very passive agressive person who will backhandedly say everything."
       );
       break;
+    case 5:
+      initialPrompt = initialPrompt.concat(
+        " ",
+        "You are a person who is not paying attention at all to what is going on, complaining about things that already happened. It's like you are not even there."
+      );
+      break;
   }
   return initialPrompt;
 }

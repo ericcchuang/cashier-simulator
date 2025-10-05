@@ -7,8 +7,6 @@ import {
 import { NextResponse } from "next/server";
 import selectPersonality from "../Personalities";
 
-// ... (selectPersonality function and safetySettings remain the same
-
 const safetySettings = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
@@ -39,7 +37,7 @@ export async function POST() {
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const personality = selectPersonality(Math.floor(Math.random() * 5));
+    const personality = selectPersonality(Math.floor(Math.random() * 6));
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
