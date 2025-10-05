@@ -15,7 +15,6 @@ import Scanner from "./groceries/Scanner";
 import Conveyor from "./groceries/Conveyor";
 import Belt from "./groceries/Belt";
 import Divider from "./groceries/Divider";
-import selectPersonality from "../components/Personalities";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -24,109 +23,134 @@ interface FormElements extends HTMLFormControlsCollection {
 interface MyElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_KEY;
-
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-
-const baseChat = ai.chats.create({
-  model: "gemini-2.5-flash-lite",
-  history: [
-    {
-      role: "user",
-      parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
-    },
-  ],
-});
+// Define the structure of a chat history item
+interface HistoryItem {
+  role: "user" | "model";
+  parts: { text: string }[];
+}
 
 export default function Home() {
-  const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [val, setVal] = useState("Customer is waiting...");
   const [score, setScore] = useState(0);
   const [customer, setCustomer] = useState(Math.floor(Math.random() * 6));
   const [tint, setTint] = useState(Math.floor(Math.random() * 10));
   const [readInstructions, setReadInstructions] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { time, start, pause, reset, status, advanceTime } = useTimer({
     initialTime: 20,
     timerType: "DECREMENTAL",
   });
+  const [personality, setPersonality] = useState("");
 
-  async function talk_to_cashier(prompt: string) {
-    const message = await currentChat.sendMessage({
-      message: prompt,
-    });
-    {
-      /*const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        systemInstruction: selectPersonality(),
-      },
-    });*/
-    }
-    console.log(currentChat.getHistory());
-    return message.text;
-  }
+  // This useEffect hook runs once on component mount to start the first game
+  useEffect(() => {
+    resetGame();
+  }, []);
 
-  async function handleSubmit(e: React.FormEvent<MyElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
-    setVal(ret ?? "");
-    (document.getElementById("customer_chat") as HTMLFormElement).reset();
-    advanceTime(-10);
-    start();
+    const form = e.currentTarget;
+    const prompt = (form.elements.namedItem("textbox") as HTMLInputElement)
+      .value;
+    if (!prompt) return;
+
+    setIsLoading(true);
+
+    const currentHistory = Array.isArray(history) ? history : [];
+    const newHistory: HistoryItem[] = [
+      ...currentHistory,
+      { role: "user", parts: [{ text: prompt }] },
+    ];
+    setHistory(newHistory);
+
+    try {
+      const response = await fetch("/api/chat/continue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // 👇 Send the current personality along with the prompt and history
+        body: JSON.stringify({ prompt, history: newHistory, personality }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setVal(data.responseText);
+        setHistory([
+          ...newHistory,
+          { role: "model", parts: [{ text: data.responseText }] },
+        ]);
+      } else {
+        setVal(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      setVal("Error: Could not connect to the server.");
+    } finally {
+      form.reset();
+      setIsLoading(false);
+    }
   }
 
   async function newCustomer() {
-    const ret = (await rateUser()) + " Next customer is waiting...";
-    setVal(ret ?? "");
-    setCustomer(Math.floor(Math.random() * 6));
-    setTint(Math.floor(Math.random() * 10));
-    (document.getElementById("customer_chat") as HTMLFormElement).reset();
-    setCurrentChat(
-      ai.chats.create({
-        model: "gemini-2.5-flash-lite",
-        history: [
-          {
-            role: "user",
-            parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
-          },
-          {
-            role: "model",
-            parts: [{ text: "Okay." }],
-          },
-        ],
-      })
-    );
-    start();
-  }
+    setIsLoading(true);
+    try {
+      // 1. Rate the previous user first
+      const rateResponse = await fetch("/api/chat/rate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ history }),
+      });
+      const rateData = await rateResponse.json();
 
-  async function rateUser() {
-    const message = await currentChat.sendMessage({
-      message:
-        "Rate all previous interactions with the cashier from -5 to +5 based on how good their customer service was. Be brief in your rating, keep it to 1-2 sentences. Be harsh but fair, do not be afraid to give a low score if you think the service was terrible. Make sure the the score is in the format +x or -x and it is the first two characters of the message. Include the leading + or - (for example, +1, -2, etc). No matter what, start with the value + or -. Do not break this rule. Do not start with any filler words or punctuaction or in character. Only start with + or -.",
-    });
-    setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
-    return message.text;
+      if (rateResponse.ok) {
+        setScore((prevScore) => prevScore + rateData.scoreChange);
+        setVal(`${rateData.ratingText} Next customer is waiting...`);
+      } else {
+        setVal(`Rating Error: ${rateData.error}. Next customer is waiting...`);
+      }
+
+      // 2. Start a new chat session for the new customer
+      const startResponse = await fetch("/api/chat/start", { method: "POST" });
+      const startData = await startResponse.json();
+
+      if (startResponse.ok) {
+        setHistory(startData.initialHistory);
+        // Optionally, update val again if you want the greeting to be the last message seen
+        // setVal(startData.initialMessage);
+      } else {
+        setVal(`Error: ${startData.error}`);
+      }
+    } catch (error) {
+      setVal("Error: Could not connect to the server.");
+    } finally {
+      setCustomer(Math.floor(Math.random() * 6));
+      setTint(Math.floor(Math.random() * 10));
+      setIsLoading(false);
+    }
   }
 
   async function resetGame() {
-    const ret = "Next customer is waiting...";
-    setVal(ret ?? "");
-    (document.getElementById("customer_chat") as HTMLFormElement).reset();
-    setCurrentChat(
-      ai.chats.create({
-        model: "gemini-2.5-flash-lite",
-        history: [
-          {
-            role: "user",
-            parts: [{ text: selectPersonality(Math.floor(Math.random() * 5)) }],
-          },
-        ],
-      })
-    );
+    setIsLoading(true);
     reset();
-    setScore(0);
     start();
+    setScore(0);
+    try {
+      const response = await fetch("/api/chat/start", { method: "POST" });
+      const data = await response.json();
+
+      if (response.ok && Array.isArray(data.initialHistory)) {
+        // 👇 Store the new personality received from the backend
+        setPersonality(data.personality);
+        setVal(data.initialMessage);
+        setHistory(data.initialHistory);
+      } else {
+        setVal(`Error: Failed to initialize game.`);
+        setHistory([]);
+      }
+    } catch (error) {
+      setVal("Error: Could not connect to the server.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function iRead() {
