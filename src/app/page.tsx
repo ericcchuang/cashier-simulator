@@ -209,8 +209,8 @@ export default function Home() {
               New
             </button>
           </form>
-          <p className="my-3 p-3 bg-black border-2 border-white">
-            Score: {score}, Time: {time}
+          <p className="my-3 p-3 bg-black border-2 border-white text-6xl">
+            Score: {score} Time: {time}
           </p>
         </div>
         <div
