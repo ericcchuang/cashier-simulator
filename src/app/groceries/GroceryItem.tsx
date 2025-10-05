@@ -55,8 +55,9 @@ export default function GroceryItem({ id, item }: GroceryItemProps) {
     : {};
   let style = {
     ...transformStyle,
-    right: -25,
-    zIndex: 99,
+    right: "-30vw",
+    top: "-12vw",
+    position: "absolute",
   };
 
   function moveImage() {

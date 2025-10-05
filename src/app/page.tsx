@@ -242,18 +242,19 @@ export default function Home() {
               <Belt beltID={5} />
               <Belt beltID={6} />
               <Belt beltID={7} />
-            </div>
-            <div style={{ position: "relative" }}>
-              <GroceryItem id="0" item={0} />
-              <GroceryItem id="1" item={1} />
-              <GroceryItem id="2" item={2} />
-              <GroceryItem id="3" item={3} />
-              <GroceryItem id="4" item={4} />
-              <GroceryItem id="5" item={5} />
-              <GroceryItem id="6" item={6} />
-              <GroceryItem id="7" item={7} />
-              <GroceryItem id="8" item={8} />
-              <GroceryItem id="9" item={9} />
+
+              <div style={{ position: "absolute" }}>
+                <GroceryItem id="0" item={0} />
+                <GroceryItem id="1" item={1} />
+                <GroceryItem id="2" item={2} />
+                <GroceryItem id="3" item={3} />
+                <GroceryItem id="4" item={4} />
+                <GroceryItem id="5" item={5} />
+                <GroceryItem id="6" item={6} />
+                <GroceryItem id="7" item={7} />
+                <GroceryItem id="8" item={8} />
+                <GroceryItem id="9" item={9} />
+              </div>
             </div>
           </DndContext>
         </div>
