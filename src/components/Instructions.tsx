@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function InstructionsModal({ disableScript }) {
+interface InstructionsModalProps {
+  disableScript: () => void; // This specifies that 'disableScript' is a function that returns nothing.
+}
+
+export default function InstructionsModal({
+  disableScript,
+}: InstructionsModalProps) {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100/75">
       <div className="bg-white rounded-md overflow-hidden max-w-md w-full mx-4">

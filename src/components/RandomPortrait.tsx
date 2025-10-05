@@ -2,7 +2,15 @@ import React from "react";
 import Image from "next/image";
 import { PixelsImage } from "react-pixels";
 
-export default function randomPortrait({ randomImage, randomFilter }) {
+interface RandomPortraitProps {
+  randomImage: number;
+  randomFilter: number;
+}
+
+export default function randomPortrait({
+  randomImage,
+  randomFilter,
+}: RandomPortraitProps) {
   let imageSource = "";
   switch (randomImage) {
     case 0:

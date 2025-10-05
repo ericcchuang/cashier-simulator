@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function LossModal({ replayScript, score }) {
+interface LostModalProps {
+  replayScript: () => void;
+  score: number;
+}
+
+export default function LossModal({ replayScript, score }: LostModalProps) {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100/75">
       <div className="bg-white rounded-md overflow-hidden max-w-md w-full mx-4">
