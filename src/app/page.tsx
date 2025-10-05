@@ -80,7 +80,7 @@ export default function Home() {
   const [customer, setCustomer] = useState(Math.floor(Math.random() * 6));
   const [tint, setTint] = useState(Math.floor(Math.random() * 10));
   const { time, start, pause, reset, status, advanceTime } = useTimer({
-    initialTime: 10,
+    initialTime: 20,
     timerType: "DECREMENTAL",
   });
 
@@ -106,7 +106,7 @@ export default function Home() {
     const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
     setVal(ret ?? "");
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
-    advanceTime(-5);
+    advanceTime(-10);
     start();
   }
 
@@ -127,7 +127,7 @@ export default function Home() {
         ],
       })
     );
-    advanceTime(-5);
+    advanceTime(-10);
     start();
   }
 
@@ -213,7 +213,6 @@ export default function Home() {
             Score: {score}, Time: {time}
           </p>
         </div>
-        {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
         <div
           className="flex flex-row justify-center align-middle max-w-3/5 min-w-1/2 items-center mt-15"
           style={{ position: "fixed", right: 0 }}
@@ -231,6 +230,7 @@ export default function Home() {
             <Belt beltID={3} />
           </DndContext>
         </div>
+        {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
       </main>
     </div>
   );
