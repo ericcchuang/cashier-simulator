@@ -94,7 +94,7 @@ export default function GroceryItem({ id, item }: GroceryItemProps) {
 
   moveImage();
 
-  const className = "align-center w-[10vw]";
+  const className = "align-center scale-70";
   return (
     <input
       type="image"
