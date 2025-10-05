@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
-import backgroundImage from "../assets/background.jpg";
+import cereal from "../assets/cereal.png";
+import GroceryItem from "./groceries/GroceryItem";
 import { useTimer } from "use-timer";
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -130,7 +131,7 @@ export default function Home() {
     <div
       className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
       style={{
-        backgroundImage: `url(${backgroundImage.src})`,
+        backgroundImage: `url('/assets/background.jpg')`,
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -168,6 +169,7 @@ export default function Home() {
             Score: {score}, Time: {time}
           </p>
         </div>
+        <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
       </main>
     </div>
   );
