@@ -67,10 +67,6 @@ export default function GroceryItem({ id, item }: GroceryItemProps) {
       if (xPos > -35) {
         xPos = xPos - 0.2;
       } else {
-        xPos = 0;
-        if (image) {
-          image.style.transform = `translate(60vw, 0px)`;
-        }
       }
       // Increment the x-coordinate
       if (image) {
