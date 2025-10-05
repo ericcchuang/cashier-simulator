@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const conversationTranscript = history
       .slice(2)
       .map((entry: Content) => {
-        const prefix = entry.role === "model" ? "Cashier:" : "Customer:";
+        const prefix = entry.role === "model" ? "Customer:" : "Cashier:";
         return `${prefix} ${entry.parts[0].text}`;
       })
       .join("\n");
