@@ -163,6 +163,7 @@ export default function Home() {
 
   async function iRead() {
     setReadInstructions(true);
+    start();
   }
 
   function handleDrop(event: DragEndEvent) {
