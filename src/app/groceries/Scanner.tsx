@@ -7,7 +7,7 @@ export default function Scanner() {
   });
   const style = {
     color: isOver ? "green" : undefined,
-    width: "50vw",
+    width: "40vw",
   };
 
   return (

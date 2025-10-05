@@ -7,7 +7,7 @@ export default function Conveyor() {
   });
   const style = {
     color: isOver ? "green" : undefined,
-    width: "50vw",
+    width: "60vw",
   };
 
   return (

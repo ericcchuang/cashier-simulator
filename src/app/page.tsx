@@ -204,7 +204,10 @@ export default function Home() {
           </p>
         </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
-        <div className="flex flex-row justify-center align-middle max-w-1/2">
+        <div
+          className="flex flex-row justify-center align-middle max-w-3/5 min-w-1/2 items-center mt-15"
+          style={{ position: "fixed", right: 0 }}
+        >
           <DndContext modifiers={[restrictToWindowEdges]}>
             <Scanner />
             <Conveyor />
