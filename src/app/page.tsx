@@ -8,6 +8,7 @@ import GroceryItem from "./groceries/GroceryItem";
 import { DndContext } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
+import RandomPortrait from "../components/RandomPortrait";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -72,6 +73,8 @@ export default function Home() {
   const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
   const [val, setVal] = useState("Customer is waiting...");
   const [score, setScore] = useState(0);
+  const [customer, setCustomer] = useState(Math.floor(Math.random() * 6));
+  const [tint, setTint] = useState(Math.floor(Math.random() * 10));
   const { time, start, pause, reset, status, advanceTime } = useTimer({
     initialTime: 10,
     timerType: "DECREMENTAL",
@@ -106,6 +109,8 @@ export default function Home() {
   async function newCustomer() {
     const ret = (await rateUser()) + " Next customer is waiting...";
     setVal(ret ?? "");
+    setCustomer(Math.floor(Math.random() * 6));
+    setTint(Math.floor(Math.random() * 10));
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
     setCurrentChat(
       ai.chats.create({
@@ -162,13 +167,7 @@ export default function Home() {
     >
       <main className="flex flex-row gap-[32px] row-start-2 items-center sm:items-start">
         <div id="textboxdiv" className="items-center w-sm">
-          <Image
-            src="/assets/customer.png"
-            width={200}
-            height={200}
-            alt="customer"
-            className="border-4 border-black"
-          />
+          <RandomPortrait randomImage={customer} randomFilter={tint} />
           <div className="my-3 p-3 bg-black min-h-1/2 max-h-1/2 border-2 border-white">
             {val}
           </div>
