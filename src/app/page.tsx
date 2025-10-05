@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
 import backgroundImage from "../assets/background.jpg";
+import { useTimer } from "use-timer";
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
 }
@@ -67,6 +68,10 @@ export default function Home() {
   const [currentChat, setCurrentChat] = useState<Chat>(baseChat);
   const [val, setVal] = useState("Customer is waiting...");
   const [score, setScore] = useState(0);
+  const { time, start, pause, reset, status } = useTimer({
+    initialTime: 15,
+    timerType: "DECREMENTAL",
+  });
 
   async function talk_to_cashier(prompt: string) {
     const message = await currentChat.sendMessage({
@@ -90,6 +95,8 @@ export default function Home() {
     const ret = await talk_to_cashier(e.currentTarget.elements.textbox.value);
     setVal(ret ?? "");
     (document.getElementById("customer_chat") as HTMLFormElement).reset();
+    reset();
+    start();
   }
 
   async function newCustomer() {
@@ -107,6 +114,8 @@ export default function Home() {
         ],
       })
     );
+    reset();
+    start();
   }
 
   async function rateUser() {
@@ -117,7 +126,6 @@ export default function Home() {
     setScore(score + parseInt(message.text?.slice(0, 2) ?? "0"));
     return message.text;
   }
-
   return (
     <div
       className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 gap-16 sm:p-20"
@@ -156,7 +164,9 @@ export default function Home() {
               New
             </button>
           </form>
-          <p className="my-3 p-3 bg-black">Score: {score}</p>
+          <p className="my-3 p-3 bg-black">
+            Score: {score}, Time: {time}
+          </p>
         </div>
       </main>
     </div>
