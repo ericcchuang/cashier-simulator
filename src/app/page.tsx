@@ -5,7 +5,7 @@ import { Chat, GoogleGenAI } from "@google/genai";
 import "dotenv/config";
 import cereal from "../assets/cereal.png";
 import GroceryItem from "./groceries/GroceryItem";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { useTimer } from "use-timer";
 import LossModal from "../components/Lost";
 import RandomPortrait from "../components/RandomPortrait";
@@ -159,6 +159,15 @@ export default function Home() {
     setScore(0);
   }
 
+  function handleDrop(event: DragEndEvent) {
+    if (event.over) {
+      const item = document.getElementById(event.active.id.toString());
+      console.log(`removing element with id ${event.active.id}`);
+      item?.remove();
+      setScore(score + 1);
+    }
+  }
+
   return (
     <div
       className="font-sans grid grid-rows-[20px_1fr_20px] min-h-screen p-16"
@@ -209,7 +218,11 @@ export default function Home() {
           className="flex flex-row justify-center align-middle max-w-3/5 min-w-1/2 items-center mt-15"
           style={{ position: "fixed", right: 0 }}
         >
-          <DndContext modifiers={[restrictToWindowEdges]}>
+          <DndContext
+            id="dnd-context"
+            modifiers={[restrictToWindowEdges]}
+            onDragEnd={handleDrop}
+          >
             <Scanner />
             <Conveyor />
             <Belt beltID={0} />

@@ -6,13 +6,18 @@ export default function Scanner() {
     id: "grocery-scanner",
   });
   const style = {
-    color: isOver ? "green" : undefined,
+    filter: isOver
+      ? "invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%)"
+      : undefined,
     width: "40vw",
   };
+  // if (isOver) {
+  //   console.log("over!!!");
+  // }
 
   return (
     <div ref={setNodeRef} style={style}>
-      <img src="/assets/scanner.png" />
+      <img style={style} src="/assets/scanner.png" />
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function GroceryItem({ id, imgUrl }: GroceryItemProps) {
       }
     : undefined;
 
-  const className = "align-center w-3/5";
+  const className = "align-center w-[10vw]";
   return (
     <input
       type="image"
@@ -27,7 +27,7 @@ export default function GroceryItem({ id, imgUrl }: GroceryItemProps) {
       className={className}
       ref={setNodeRef}
       style={style}
-      role="button"
+      id={id}
     ></input>
   );
 }
