@@ -228,6 +228,10 @@ export default function Home() {
             <Belt beltID={1} />
             <Belt beltID={2} />
             <Belt beltID={3} />
+            <Belt beltID={4} />
+            <Belt beltID={5} />
+            <Belt beltID={6} />
+            <Belt beltID={7} />
           </DndContext>
         </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}

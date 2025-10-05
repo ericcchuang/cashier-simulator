@@ -2,28 +2,28 @@ import React, { ReactNode } from "react";
 import { useDroppable } from "@dnd-kit/core";
 
 export default function Belt({ beltID }) {
-  let xPos = 0;
+  let xPos = beltID * -5;
 
   const style = {
-    height: "20vw",
-    right: `${beltID * 100}`,
+    maxHeight: "12.5vw",
+    right: `${beltID * 25}vw`,
   };
 
   let bid = "belt".concat(beltID);
 
   function moveImage() {
     const image = document.getElementById(bid);
-    if (xPos > -500) {
-      xPos--;
+    if (xPos > -35) {
+      xPos = xPos - 0.2;
     } else {
       xPos = 0;
       if (image) {
-        image.style.transform = `translate(500px, 0px)`;
+        image.style.transform = `translate(60vw, 0px)`;
       }
     }
     // Increment the x-coordinate
     if (image) {
-      image.style.transform = `translate(${xPos}px, 0px)`;
+      image.style.transform = `translate(${xPos}vw, 0px)`;
     }
     requestAnimationFrame(moveImage);
   }
