@@ -11,6 +11,7 @@ import LossModal from "../components/Lost";
 import RandomPortrait from "../components/RandomPortrait";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import Scanner from "./groceries/Scanner";
+import Conveyor from "./groceries/Conveyor";
 
 interface FormElements extends HTMLFormControlsCollection {
   textbox: HTMLInputElement;
@@ -203,10 +204,10 @@ export default function Home() {
           </p>
         </div>
         {time < 1 ? <LossModal replayScript={resetGame} /> : ""}
-        <div className="flex-row items-baseline-last">
+        <div className="flex flex-row justify-center align-middle max-w-1/2">
           <DndContext modifiers={[restrictToWindowEdges]}>
             <Scanner />
-            <GroceryItem id="hi" imgUrl="/assets/cereal.png" />
+            <Conveyor />
           </DndContext>
         </div>
       </main>

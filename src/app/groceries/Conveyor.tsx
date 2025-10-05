@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react";
 import { useDroppable } from "@dnd-kit/core";
 
-export default function Scanner() {
+export default function Conveyor() {
   const { isOver, setNodeRef } = useDroppable({
-    id: "grocery-scanner",
+    id: "conveyer",
   });
   const style = {
     color: isOver ? "green" : undefined,
@@ -12,7 +12,7 @@ export default function Scanner() {
 
   return (
     <div ref={setNodeRef} style={style}>
-      <img src="/assets/scanner.png" />
+      <img src="/assets/conveyor.png" />
     </div>
   );
 }
