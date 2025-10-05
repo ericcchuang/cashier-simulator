@@ -1,110 +1,88 @@
+// components/GroceryItem.tsx
+"use client";
+
 import { useDraggable } from "@dnd-kit/core";
-import { randomUUID } from "crypto";
-import { useState } from "react";
+import { useState, useEffect, useRef, CSSProperties } from "react";
+
+// Cleaner way to map items to image URLs
+const groceryImageUrls = [
+  "/assets/bleach.png",
+  "/assets/cereal.png",
+  "/assets/essential.png",
+  "/assets/gum.png",
+  "/assets/mlk.png",
+  "/assets/pnut.png",
+  "/assets/rootbeer.png",
+  "/assets/soap.png",
+  "/assets/steak.png",
+  "/assets/tueothpaste.png",
+];
 
 interface GroceryItemProps {
   id: string;
   item: number;
+  index: number; // Pass the item's index for a staggered effect
 }
 
-export default function GroceryItem({ id, item }: GroceryItemProps) {
-  let imgUrl = "";
-  switch (item) {
-    case 0:
-      imgUrl = "/assets/bleach.png";
-      break;
-    case 1:
-      imgUrl = "/assets/cereal.png";
-      break;
-    case 2:
-      imgUrl = "/assets/essential.png";
-      break;
-    case 3:
-      imgUrl = "/assets/gum.png";
-      break;
-    case 4:
-      imgUrl = "/assets/mlk.png";
-      break;
-    case 5:
-      imgUrl = "/assets/pnut.png";
-      break;
-    case 6:
-      imgUrl = "/assets/rootbeer.png";
-      break;
-    case 7:
-      imgUrl = "/assets/soap.png";
-      break;
-    case 8:
-      imgUrl = "/assets/steak.png";
-      break;
-    case 9:
-      imgUrl = "/assets/tueothpaste.png";
-      break;
-  }
+export default function GroceryItem({ id, item, index }: GroceryItemProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [idleXPos, setIdleXPos] = useState(0); // State for idle animation position
+  const animationFrameId = useRef<number>(0);
 
-  const image = document.getElementById(id);
-  let xPos = 0;
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id,
-    });
-  let transformStyle = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    useDraggable({ id });
+
+  // Effect for staggered visibility
+  useEffect(() => {
+    const delay = index * 300; // 300ms delay per item
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer); // Cleanup
+  }, [index]);
+
+  // Effect for idle animation
+  useEffect(() => {
+    const moveImage = () => {
+      setIdleXPos((prevX) => (prevX > -85 ? prevX - 0.2 : -85));
+      animationFrameId.current = requestAnimationFrame(moveImage);
+    };
+
+    // Start animation only if visible AND not dragging
+    if (isVisible && !isDragging) {
+      animationFrameId.current = requestAnimationFrame(moveImage);
+    }
+
+    // Cleanup function stops the animation
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
       }
-    : {};
-  let style = {
-    ...transformStyle,
+    };
+  }, [isVisible, isDragging]); // Dependency array now includes isVisible
+
+  // Conditionally determine the transform style
+  const style: CSSProperties = {
+    position: "absolute",
     right: "-30vw",
     top: "-12vw",
-    position: "absolute",
+    opacity: isVisible ? 1 : 0, // Control visibility
+    transition: "opacity 0.5s ease-in-out", // Smooth fade-in
+    zIndex: isDragging ? 99 : 10,
+    scale: "25%",
+    transform: isDragging
+      ? `translate3d(${transform?.x ?? 0}px, ${transform?.y ?? 0}px, 0)` // Dragging transform
+      : `translate3d(${idleXPos}vw, 0px, 0)`, // Idle animation transform
   };
 
-  function moveImage() {
-    console.log(isDragging);
-    if (!isDragging) {
-      const image = document.getElementById(id);
-      if (xPos > -35) {
-        xPos = xPos - 0.2;
-      } else {
-      }
-      // Increment the x-coordinate
-      if (image) {
-        image.style.transform = `translate(${xPos}vw, 0px)`;
-      }
-      requestAnimationFrame(moveImage);
-    } else {
-      transformStyle = transform
-        ? {
-            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-          }
-        : {};
-      style = {
-        ...transformStyle,
-        right: -25,
-        zIndex: 99,
-      };
-      if (image && transformStyle.transform) {
-        image.style.transform = transformStyle.transform;
-        image.style.zIndex = style.zIndex;
-      }
-      requestAnimationFrame(moveImage);
-    }
-  }
-
-  moveImage();
-
-  const className = "align-center scale-70";
   return (
     <input
+      id={id}
       type="image"
-      src={imgUrl}
-      {...listeners}
-      {...attributes}
-      className={className}
+      src={groceryImageUrls[item] || ""}
       ref={setNodeRef}
       style={style}
-      id={id}
-    ></input>
+      className="align-center scale-70"
+      {...listeners}
+      {...attributes}
+    />
   );
 }

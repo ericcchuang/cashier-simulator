@@ -167,9 +167,36 @@ export default function Home() {
 
   function handleDrop(event: DragEndEvent) {
     if (event.over) {
-      const item = document.getElementById(event.active.id.toString());
-      console.log(`removing element with id ${event.active.id}`);
-      item?.remove();
+      const itemId = event.active.id.toString();
+      const item = document.getElementById(itemId);
+
+      if (item) {
+        console.log(`Disabling and hiding element with id ${itemId}`);
+
+        // 1. Disable the item to prevent interaction
+        item.setAttribute("aria-disabled", "true");
+        item.style.pointerEvents = "none";
+
+        // 2. Fade the item out (requires a CSS transition)
+        item.style.opacity = "0";
+
+        const respawnDelay = Math.random() * 2000 + 1000; // 1s to 3s delay
+
+        setTimeout(() => {
+          const itemToRespawn = document.getElementById(itemId);
+          if (itemToRespawn) {
+            console.log(`Reactivating and showing element with id ${itemId}`);
+
+            // 3. Restore visual appearance
+            itemToRespawn.style.transform = "translate(0px, 0px)";
+            itemToRespawn.style.opacity = "1";
+
+            // 4. Re-enable the item to restore its logic
+            itemToRespawn.removeAttribute("aria-disabled");
+            itemToRespawn.style.pointerEvents = "auto";
+          }
+        }, respawnDelay);
+      }
       setScore(score + 1);
     }
   }
@@ -223,11 +250,7 @@ export default function Home() {
           className="max-w-3/5 min-w-1/2 mt-15"
           style={{ position: "fixed", right: 0 }}
         >
-          <DndContext
-            id="dnd-context"
-            modifiers={[restrictToWindowEdges]}
-            onDragEnd={handleDrop}
-          >
+          <DndContext id="dnd-context" onDragEnd={handleDrop}>
             <div
               className="flex flex-row justify-center align-middle items-center"
               style={{ position: "relative" }}
@@ -244,16 +267,16 @@ export default function Home() {
               <Belt beltID={7} />
 
               <div style={{ position: "absolute" }}>
-                <GroceryItem id="0" item={0} />
-                <GroceryItem id="1" item={1} />
-                <GroceryItem id="2" item={2} />
-                <GroceryItem id="3" item={3} />
-                <GroceryItem id="4" item={4} />
-                <GroceryItem id="5" item={5} />
-                <GroceryItem id="6" item={6} />
-                <GroceryItem id="7" item={7} />
-                <GroceryItem id="8" item={8} />
-                <GroceryItem id="9" item={9} />
+                <GroceryItem id="0" item={0} index={0} />
+                <GroceryItem id="1" item={1} index={1} />
+                <GroceryItem id="2" item={2} index={2} />
+                <GroceryItem id="3" item={3} index={3} />
+                <GroceryItem id="4" item={4} index={4} />
+                <GroceryItem id="5" item={5} index={5} />
+                <GroceryItem id="6" item={6} index={6} />
+                <GroceryItem id="7" item={7} index={7} />
+                <GroceryItem id="8" item={8} index={8} />
+                <GroceryItem id="9" item={9} index={9} />
               </div>
             </div>
           </DndContext>
