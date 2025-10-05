@@ -89,6 +89,7 @@ export default function Home() {
       form.reset();
       setIsLoading(false);
     }
+    advanceTime(-10);
   }
 
   async function newCustomer() {
