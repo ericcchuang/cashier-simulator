@@ -22,21 +22,17 @@ export default function Divider({
 }: DividerProps) {
   const [isVisible, setIsVisible] = useState(false);
   const isInitialRender = useRef(true);
-
-  // 👇 1. Add new state to track the scrolling position
   const [scrollX, setScrollX] = useState(0);
   const animationFrameId = useRef<number>(0);
 
-  // This ref stores the onDisappear callback to prevent timer resets
   const onDisappearRef = useRef(onDisappear);
   useEffect(() => {
     onDisappearRef.current = onDisappear;
   }, [onDisappear]);
 
-  // This useEffect handles the appear/disappear TIMERS
+  // useEffect for the appear/disappear cycle (no changes needed)
   useEffect(() => {
     let timerId: NodeJS.Timeout;
-
     if (isVisible) {
       timerId = setTimeout(() => {
         onDisappearRef.current();
@@ -55,7 +51,6 @@ export default function Divider({
       }
       timerId = setTimeout(() => setIsVisible(true), delay);
     }
-
     return () => clearTimeout(timerId);
   }, [
     isVisible,
@@ -65,45 +60,48 @@ export default function Divider({
     maxRespawnDelay,
   ]);
 
-  // 👇 2. Add a new useEffect hook for the scrolling ANIMATION
+  // useEffect for the scrolling animation (updated to match GroceryItem movement)
   useEffect(() => {
-    // Only run the animation if the divider is visible
     if (isVisible) {
-      // When it first becomes visible, reset its position to the start
-      setScrollX(0);
-
+      setScrollX(0); // Reset position
       const animateScroll = () => {
-        // Move the item to the left. Adjust '-100' to change the travel distance.
-        setScrollX((prevX) => (prevX > -100 ? prevX - 0.1 : -100));
+        // Match the GroceryItem's 45vw travel distance
+        setScrollX((prevX) => (prevX > -45 ? prevX - 0.1 : -45));
         animationFrameId.current = requestAnimationFrame(animateScroll);
       };
-      // Start the animation loop
       animationFrameId.current = requestAnimationFrame(animateScroll);
     }
 
-    // Cleanup function: Stop the animation when the component hides or unmounts
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isVisible]); // This effect runs only when `isVisible` changes
+  }, [isVisible]);
 
-  const style: React.CSSProperties = {
+  // 👇 All styles are now combined and applied directly to the <img>
+  const imageStyle: React.CSSProperties = {
+    // Positioning from the original, visible Divider
     position: "absolute",
-    top: "-20%",
-    left: "90%", // Starting horizontal position
-    transition: "opacity 0.5s ease-in-out",
+    top: "0%",
+    left: "100%",
+
+    // Explicit sizing to guarantee visibility
+    height: "20vw",
+    width: "auto", // Automatically maintains the image's aspect ratio
+
+    // Animation and visibility styles
     opacity: isVisible ? 1 : 0,
-    maxHeight: "12.5vw",
-    pointerEvents: "none",
-    // 👇 3. Apply the scrolling animation via the transform property
     transform: `translateX(${scrollX}vw)`,
+    transition: "opacity 0.5s ease-in-out",
+    pointerEvents: "none",
   };
 
   return (
-    <div style={style}>
-      <img src={src} alt="Scrolling divider" />
-    </div>
+    <img
+      src={src}
+      style={imageStyle} // Apply styles directly here
+      alt="Scrolling divider"
+    />
   );
 }
