@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ratingText:
         "-10, Cashier did not attempt to talk. Management noticed on camera.",
-      scoreChange: 0,
+      scoreChange: -10,
     });
   }
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     const result = await model.generateContent(ratingPrompt);
 
     const ratingText = result.response.text();
-    const scoreChange = parseInt(ratingText.slice(0, 2), 10) || 0;
+    const scoreChange = parseInt(ratingText.slice(0, 2));
 
     return NextResponse.json({ ratingText, scoreChange });
   } catch (error) {

@@ -79,7 +79,9 @@ export default function Home() {
         setVal(`Error: ${data.error}`);
       }
     } catch (error) {
-      setVal("Error: Could not connect to the server.");
+      setVal(
+        "Error: Could not connect to the server. We got rate limited by Gemini :("
+      );
     } finally {
       form.reset();
       setIsLoading(false);
@@ -102,7 +104,7 @@ export default function Home() {
           setVal(`${rateData.ratingText} Next customer is waiting...`);
         } else {
           setVal(
-            `Rating Error: ${rateData.error}. Next customer is waiting...`
+            `Rating Error: ${rateData.error}. We got rate limited by Gemini :( Next customer is waiting...`
           );
         }
 
@@ -115,12 +117,16 @@ export default function Home() {
           setPersonality(startData.personality);
           setHistory(startData.initialHistory);
         } else {
-          setVal(`Error: Failed to get new customer history.`);
+          setVal(
+            `Error: Failed to get new customer history. We got rate limited by Gemini :(`
+          );
           setHistory([]);
         }
       }
     } catch (error) {
-      setVal("Error: Could not connect to the server.");
+      setVal(
+        "Error: Could not connect to the server. We got rate limited by Gemini :("
+      );
     } finally {
       setCustomer(Math.floor(Math.random() * 6));
       setTint(Math.floor(Math.random() * 10));
@@ -144,11 +150,15 @@ export default function Home() {
         setVal(data.initialMessage);
         setHistory(data.initialHistory);
       } else {
-        setVal(`Error: Failed to initialize game.`);
+        setVal(
+          `Error: Failed to initialize game. We got rate limited by Gemini :(`
+        );
         setHistory([]);
       }
     } catch (error) {
-      setVal("Error: Could not connect to the server.");
+      setVal(
+        "Error: Could not connect to the server. We got rate limited by Gemini :("
+      );
     } finally {
       setIsLoading(false);
     }
