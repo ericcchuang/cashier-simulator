@@ -6,6 +6,7 @@ import {
 } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import selectPersonality from "../Personalities";
+export const dynamic = "force-dynamic";
 
 const safetySettings = [
   {
@@ -60,7 +61,9 @@ export async function POST() {
   } catch (error) {
     console.error("CRITICAL_ERROR in /api/chat/start:", error);
     return NextResponse.json(
-      { error: "Failed to start chat session." },
+      {
+        error: "Failed to start chat session. We got rate limited by Gemini :(",
+      },
       { status: 500 }
     );
   }

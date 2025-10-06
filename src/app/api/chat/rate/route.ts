@@ -51,6 +51,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ratingText, scoreChange });
   } catch (error) {
     console.error("Error rating chat:", error);
-    return NextResponse.json({ error: "Failed to rate chat" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to rate chat. We got rate limited by Gemini :(" },
+      { status: 500 }
+    );
   }
 }

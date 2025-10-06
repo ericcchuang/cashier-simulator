@@ -63,10 +63,17 @@ export default function GroceryItem({ id, item, index }: GroceryItemProps) {
     };
   }, [isVisible, isDragging]);
 
+  let y;
+  if (id === "3") {
+    y = -9;
+  } else {
+    y = `${-12 + index * 0.5}vw`;
+  }
+
   const style: CSSProperties = {
     position: "absolute",
     right: `${-50 + idleRightOffset}vw`,
-    top: "-12vw",
+    top: y,
     opacity: isVisible ? 1 : 0,
     zIndex: isDragging ? 99 : 10,
     scale: "25%",

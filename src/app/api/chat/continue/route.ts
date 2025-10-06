@@ -60,7 +60,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error continuing chat:", error);
     return NextResponse.json(
-      { error: "Failed to continue chat" },
+      { error: "Failed to continue chat. We got rate limited by Gemini :(" },
       { status: 500 }
     );
   }

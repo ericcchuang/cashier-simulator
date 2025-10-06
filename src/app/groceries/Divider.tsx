@@ -14,9 +14,9 @@ interface DividerProps {
 export default function Divider({
   onDisappear,
   src,
-  initialDelay = 2,
-  minRespawnDelay = 7,
-  maxRespawnDelay = 12,
+  initialDelay = 30,
+  minRespawnDelay = 20,
+  maxRespawnDelay = 40,
   visibleDuration = 5,
 }: DividerProps) {
   const [isVisible, setIsVisible] = useState(false);

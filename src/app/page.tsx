@@ -90,29 +90,34 @@ export default function Home() {
   async function newCustomer() {
     setIsLoading(true);
     try {
-      // 1. Rate the previous user first
-      const rateResponse = await fetch("/api/chat/rate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ history }),
-      });
-      const rateData = await rateResponse.json();
+      if (time > 0 && time != 20) {
+        const rateResponse = await fetch("/api/chat/rate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ history }),
+        });
+        const rateData = await rateResponse.json();
+        if (rateResponse.ok) {
+          setScore((prevScore) => prevScore + rateData.scoreChange);
+          setVal(`${rateData.ratingText} Next customer is waiting...`);
+        } else {
+          setVal(
+            `Rating Error: ${rateData.error}. Next customer is waiting...`
+          );
+        }
 
-      if (rateResponse.ok) {
-        setScore((prevScore) => prevScore + rateData.scoreChange);
-        setVal(`${rateData.ratingText} Next customer is waiting...`);
-      } else {
-        setVal(`Rating Error: ${rateData.error}. Next customer is waiting...`);
-      }
+        const startResponse = await fetch(`/api/chat/start?t=${Date.now()}`, {
+          method: "POST",
+        });
+        const startData = await startResponse.json();
 
-      // 2. Start a new chat session for the new customer
-      const startResponse = await fetch("/api/chat/start", { method: "POST" });
-      const startData = await startResponse.json();
-
-      if (startResponse.ok) {
-        setHistory(startData.initialHistory);
-      } else {
-        setVal(`Error: ${startData.error}`);
+        if (startResponse.ok && Array.isArray(startData.initialHistory)) {
+          setPersonality(startData.personality);
+          setHistory(startData.initialHistory);
+        } else {
+          setVal(`Error: Failed to get new customer history.`);
+          setHistory([]);
+        }
       }
     } catch (error) {
       setVal("Error: Could not connect to the server.");
@@ -124,12 +129,14 @@ export default function Home() {
   }
 
   async function resetGame() {
-    setIsLoading(true);
     reset();
     start();
+    setIsLoading(true);
     setScore(0);
     try {
-      const response = await fetch("/api/chat/start", { method: "POST" });
+      const response = await fetch(`/api/chat/start?t=${Date.now()}`, {
+        method: "POST",
+      });
       const data = await response.json();
 
       if (response.ok && Array.isArray(data.initialHistory)) {
